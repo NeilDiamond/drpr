@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' Fit the Nelson-Siegel model adjusting for Credit ratings\n#\n#'\n#' @param data data file with at least columns named Yield and Maturity and Credit rating\n#' @param lambdastartval starting value for lambda in Nelson-Siegel model\n#' @param epsilon a small value to prevent -Inf when taking log of zero\n#' @return A NelsonSiegelAdjust object\n#' @export\nfitnelsonsiegeladjust <- function(data, lambdastartval=lambdastart(2.5),\n                                                 epsilon=1E-14){\n  lambda <- lambdastartval\n  DF <- data\n  dummyvars <- model.matrix(~DF$Credit.rating)[,2:3]\n  y <- DF$Yield\n  Z <- DF$Maturity*lambda\n  F0 <- 1-(1-exp(-Z))/Z\n  F1 <- (1-exp(-Z))/Z\n  F2 <- ((1-exp(-Z))/Z-exp(-Z))\n  BBB <- as.numeric(as.character(DF$Credit.rating)==\"BBB\")\n  BBBm <- as.numeric(as.character(DF$Credit.rating)==\"BBB-\")\n\n  xx1 <- nnnpls(cbind(F0,F1,F2,BBB+BBBm,BBBm),DF$Yield,c(1,1,-1,1,1))\n  xx2 <- nnnpls(cbind(F0,F1,F2,BBB+BBBm,BBBm),DF$Yield,c(1,1,1,1,1))\n\n\n  mindeviance=c(deviance(xx1),deviance(xx2))\n  eval(parse(text=paste0(\"svA <- coef(xx\",which.min(mindeviance),\")\")))\n\n  fitorig1 <- nlsLM(Yield~ exp(delta1) + (exp(delta2)-exp(delta1)) * (1-exp(-Maturity*(exp(gamma)))) /\n                      (Maturity*(exp(gamma))) +\n                      delta3 * ((1-exp(-Maturity*(exp(gamma)))) /\n                                  (Maturity*(exp(gamma)))-\n                                  exp(-Maturity*(exp(gamma))))+\n                           exp(theta1)*(BBB+BBBm)+exp(theta2)*BBBm,\n                    data=DF,\n                    start=list(delta1=log(svA[1]+epsilon),\n                               delta2=log(svA[2]+epsilon),\n                               delta3=svA[3],\n                               gamma=log(lambdastartval),\n                               theta1=log(svA[4]+epsilon),\n                               theta2=log(svA[5]+epsilon)),\n                    control=nls.lm.control(maxiter=1000,maxfev=2000), trace=F,model=T)\n\n  class(fitorig1) <- c(\"NelsonSiegelAdjust\",\"nls\")\n  return(fitorig1)\n}\n\n\n\n\n\n\n\n\n\n",
+    "created" : 1450155785590.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "129128180",
+    "id" : "71C56EF0",
+    "lastKnownWriteTime" : 1453688877,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/fitnelsonsiegeladjust.R",
+    "project_path" : "R/fitnelsonsiegeladjust.R",
+    "properties" : {
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

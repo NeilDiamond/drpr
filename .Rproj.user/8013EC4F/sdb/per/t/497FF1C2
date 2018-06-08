@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'summary.NelsonSiegeladjust\n#'\n#'@description summary method for class \"NelsonSiegelAdjust\"\n#'\n#'@param obj an object of class \"NelsonSiegelAdjust\"\n#'@return list consisting of Fitted Nelson-Siegel model, ten year yield (semi-annual basis),  and ten year yield (annual basis)\n#'@export\n\nsummary.NelsonSiegelAdjust <- function(obj){\n  transformnsa <- function(obj){\n    cc <- coef(obj)\n    tt <- cc\n    tt[1] <- exp(cc[1]); tt[2] <- exp(cc[2])-exp(cc[1])\n    tt[4] <- exp(cc[4]); tt[5] <- exp(cc[6]); tt[6] <- -exp(cc[5])\n    names(tt) <- c(\"beta1\",\"beta2\",\"beta3\",\"lambda\", \"beta5\", \"beta6\")\n    return(tt)\n  }\n  x1 <- predict(obj, newdata=data.frame(Maturity=10, BBBm=0, BBB=0))[1]\n  x2 <- predict(obj, newdata=data.frame(Maturity=10, BBBm=0, BBB=1))[1]\n  x3 <- predict(obj, newdata=data.frame(Maturity=10, BBBm=1, BBB=0))[1]\n  n2 <- sum(obj$model$BBB, na.rm=T)\n  n3 <- sum(obj$model$BBBm, na.rm=T)\n  n1 <- length(obj$model$BBB[!is.na(obj$model$BBB)])-n2-n3\n  w1 <- n1/(n1+n2+n3)\n  w2 <- n2/(n1+n2+n3)\n  w3 <- n3/(n1+n2+n3)\n  x <- w1*x1+w2*x2+w3*x3\n  r <- list(getFromNamespace(\"summary.nls\",\"stats\")(obj),transformnsa(obj),x,((1+x/200)^2-1)*100)\n  attributes(r) <- NULL\n  names(r) <- c(\"Fitted Nelson-Siegel Model\",\"Original Parameters\",\"Ten Year Yield (Semi-Annual Basis)\",\n                \"Ten Year Yield (Annual Basis)\")\n  return(r)\n}\n\n\n",
+    "created" : 1453331600472.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "522702188",
+    "id" : "497FF1C2",
+    "lastKnownWriteTime" : 1453683567,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/summaryNelsonSiegeladjust.R",
+    "project_path" : "R/summaryNelsonSiegeladjust.R",
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 20,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'print.GaussianSmooth\n#'\n#'@description print method for class \"GaussianSmooth\"\n#'\n#'@param obj an object of class \"GaussianSmooth\"\n#'@return numeric vector consisting of Target Tenor, sigma, Target Tenor Yield, and Effective Term to Maturity\n#'@export\n#'\n\nprint.GaussianSmooth <- function(obj, ...){\n  result <- c(obj[[3]], obj[[4]], coef(obj[[2]]), coef(obj[[1]]))\n  names(result) <- c(\"Target Tenor\", \"Sigma\", \"Target Tenor Yield\",\n                     \"Effective Term to Maturity\")\n  return(result)\n}\n",
+    "created" : 1453343269485.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2510489160",
+    "id" : "C302317A",
+    "lastKnownWriteTime" : 1453333908,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/printGaussianSmooth.R",
+    "project_path" : "R/printGaussianSmooth.R",
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

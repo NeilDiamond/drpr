@@ -1,0 +1,52 @@
+<!-- R Commander Markdown Template -->
+
+Example Session
+=======================
+
+### Your Name
+
+### `r as.character(Sys.Date())`
+
+```{r echo=FALSE}
+# include this code chunk as-is to set options
+knitr::opts_chunk$set(comment=NA, prompt=TRUE, out.width=750, fig.height=8, fig.width=8)
+library(Rcmdr)
+library(car)
+library(RcmdrMisc)
+```
+
+```{r}
+library(foreign, pos=15)
+```
+
+```{r}
+Example <- read.spss("/Users/neildiamond/Desktop/Employee data.sav", 
+  use.value.labels=TRUE, max.value.labels=Inf, to.data.frame=TRUE)
+colnames(Example) <- tolower(colnames(Example))
+```
+
+```{r}
+with(Example, Hist(salary, scale="frequency", breaks="Sturges", 
+  col="darkgray"))
+```
+
+```{r}
+with(Example, Hist(salary, groups=gender, scale="frequency", 
+  breaks="Sturges", col="darkgray"))
+```
+
+```{r}
+RegModel.1 <- lm(salary~jobtime, data=Example)
+summary(RegModel.1)
+```
+
+```{r}
+t.test(salary~gender, alternative='two.sided', conf.level=.95, 
+  var.equal=FALSE, data=Example)
+```
+
+```{r}
+Boxplot(salary~gender, data=Example, id.method="y")
+```
+
+

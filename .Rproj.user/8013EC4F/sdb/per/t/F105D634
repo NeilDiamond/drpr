@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' Determining starting value for decay factor\n#\n#' Determining starting value for decay factor with Diebold and Li Parameterization\n#\n#' @param maturity maturity at which second loading is maximized (in years).\n#' @return lambda maximizing second loading, to be used as starting value.\n#' @export\nlambdastart <- function(maturity=2.5){\n  beta2 <- function(lam){\n    ((1-exp(-maturity*lam))/(maturity*lam)-exp(-maturity*lam))\n  }\n  optimize(f=beta2, interval=c(10^(-6),10^(6),1000), maximum=T)$maximum\n}\n",
+    "created" : 1453683454185.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3817712564",
+    "id" : "F105D634",
+    "lastKnownWriteTime" : 1450299755,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/lambdastart.R",
+    "project_path" : "R/lambdastart.R",
+    "properties" : {
+    },
+    "relative_order" : 34,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

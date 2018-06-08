@@ -1,0 +1,271 @@
+---
+title: "drpr-vignette"
+author: "Neil Diamond"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{drpr-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+#Introduction
+
+An R package, drpr, has been built to undertake the DRP calculations in R.
+
+```{r, echo=FALSE}
+library(printr)
+```
+
+To install the package you use the command "install.packages('drpr_0.992.zip', repos=NULL)". 
+
+  
+You then need to load the package:
+```{r, echo=TRUE, eval==TRUE}
+library("drpr")
+
+Jan15m <- Jan15[order(Jan15$Maturity),][-1,]
+
+```
+
+Note that Jan15 is an example data file. In the following, I have used Jan15 with the bond with the lowest maturity removed. The user can load his or her own data using say "Dec15 <- read.csv('Dec15.csv')" where the .csv file must have (at least) three numeric columns labelled "Maturity", "Yield",
+and "Amount.issued".
+
+#No Adjustment for Credit Raings
+  
+##Gaussian Smoothing
+
+The underlying Gaussian smoothing is done by the gswt1() function. For convenience, the gkest1() calls the gswt1() function for target terms to maturity of 3, 5, 7, and 10 years. The documentation for the two functions and an Example is given below:
+
+```{r, echo=TRUE}
+?gswt1
+?gkest1
+fit0 <- gswt1(data=Jan15m)
+print(fit0)
+summary(fit0)
+```
+
+```{r, echo=T, fig.height=6,fig.width=8}
+plot(fit0)
+```
+
+```{r}
+```
+
+
+
+
+##Fitting the Nelson-Siegel model
+
+The Nelson-Siegel model is fitted using the fitnelsonsiegel() function. Be default, the starting value for the decay factor is 0.7173, which is the value maximising the loading of the curvature factor for a maturity of 2.5 years.
+
+```{r, echo=TRUE}
+library(drpr)
+library(minpack.lm)
+?fitnelsonsiegel
+fitnelsonsiegel(Jan15m)
+```
+
+
+
+```{r, echo=TRUE}
+fit1 <- fitnelsonsiegel(Jan15m)
+print(fit1)
+summary(fit1)
+```
+
+```{r, echo=T, fig.height=6,fig.width=8}
+plot(fit1)
+```
+
+```{r}
+```
+
+
+##Fitting the Nelson-Siegel-Svensson model
+
+The Nelson-Siegel-Svensson model is fitted using the fitnelsonsiegelsvensson() function. Be default, the starting value for the two decay factors maximise the loading of the curvature factor for a maturity of 2.5 years and a maturity of 5 years. However, note well, the inverse decay factors are used.
+
+
+```{r, echo=TRUE}
+?fitnelsonsiegelsvensson
+fitnelsonsiegelsvensson(Jan15, lambda1start=1/lambdastart(2.5),
+                               lambda2start=1/lambdastart(5))
+```
+
+
+```{r, echo=TRUE}
+fit2 <- fitnelsonsiegelsvensson(Jan15m, lambda1start=1/lambdastart(2.5),
+                               lambda2start=1/lambdastart(5))
+print(fit2)
+summary(fit2)
+```
+
+```{r, echo=T, fig.height=6,fig.width=8}
+plot(fit2)
+
+```
+
+###Fixing the lambda parameters
+If the lambda parameters are fixed then they can be input with the option fixed=T.
+
+```{r}
+fit2a <- fitnelsonsiegelsvensson(Jan15, lambda1start=0.17,
+                               lambda2start=3.4038, fixed=T)
+print(fit2a)
+summary(fit2a)
+```
+
+
+##Obtaining the DRP
+
+The average of the annualised ten year yield estimates using the three estimation techniques are combined with the average spot rate to give an annualised DRP. At this stage it is required to input the average spot rate on a semi-annual basis.
+
+```{r, echo=TRUE}
+?drp
+drp(fit0, fit1, fit2, avspotratesa=2.9546)
+```
+
+
+##Comparisons
+
+The package can be used to make graphical comparisons between the three techniques:
+
+```{r, echo=TRUE, fig.height=6,fig.width=8}
+drpplot(fit0, fit1, fit2)
+```
+
+```{r}
+```
+
+
+#Adjusting for Credit Raings
+
+A major shortcoming of the calculations above is that they do not adjust for credit ratings. Additional functions are provided that do this adjustment.
+
+##Gaussian Smoothing
+
+The function gswt1adjust() adjusts for credit ratings using the technique of backfitting. This is an iterative technique: First the credit ratings are ignored and the usual Gaussian Kernel is applied. Then a linear model is fitted to the residuals and the fitted model is used to adjust for the credit ratings. The process is continued until convergence. In most case only a small number of iterations are required.
+
+```{r, echo=TRUE}
+?gswt1adjust
+?gkest1adjust
+fit3 <- gswt1adjust(data=Jan15m)
+```
+
+
+
+
+```{r, echo=TRUE, fig.height=6,fig.width=8}
+print(fit3)
+summary(fit3)
+```
+
+```{r, echo=T, fig.height=6,fig.width=8}
+plot(fit3)
+```
+
+```{r}
+```
+
+
+##Fitting the Nelson-Siegel model
+
+The model allows the level parameter to depend on the credit rating but the other parameters are constrained to be the same. 
+
+```{r, echo=TRUE}
+library(drpr)
+library(minpack.lm)
+?fitnelsonsiegeladjust
+fit4 <- fitnelsonsiegeladjust(Jan15m)
+```
+
+
+```{r, echo=TRUE}
+print(fit4)
+summary(fit4)
+```
+
+```{r, echo=T, fig.height=6,fig.width=8}
+plot(fit4)
+```
+
+```{r}
+```
+
+
+##Fitting the Nelson-Siegel-Svensson model
+
+The model allows the level parameter to depend on the credit rating but the other parameters are constrained to be the same.
+
+```{r, echo=TRUE}
+?fitnelsonsiegelsvenssonadjust
+fit5 <- fitnelsonsiegelsvenssonadjust(Jan15m, lambda1start=1/lambdastart(2.5),
+                               lambda2start=1/lambdastart(5))
+```
+
+
+```{r, echo=TRUE}
+print(fit5)
+summary(fit5)
+```
+
+```{r, echo=T, fig.height=6,fig.width=8}
+plot(fit5)
+```
+
+```{r}
+```
+
+
+
+##Obtaining the DRP
+
+The three results are combined.
+
+```{r, echo=TRUE}
+?drpadjust
+drpadjust(fit3,fit4,fit5, avspotratesa=2.9546)
+```
+
+#The code
+
+```{r, echo=TRUE}
+gswt1
+gkest1
+getS3method("print", "GaussianSmooth")
+getS3method("summary", "GaussianSmooth")
+getS3method("plot", "GaussianSmooth")
+lambdastart
+fitnelsonsiegel
+getS3method("print", "NelsonSiegel")
+getS3method("summary", "NelsonSiegel")
+getS3method("plot", "NelsonSiegel")
+fitnelsonsiegelsvensson
+getS3method("print", "NelsonSiegelSvensson")
+getS3method("summary", "NelsonSiegelSvensson")
+getS3method("plot", "NelsonSiegelSvensson")
+drp
+drpplot
+gswt1adjust
+gkest1adjust
+getS3method("print", "GaussianSmoothAdjust")
+getS3method("summary", "GaussianSmoothAdjust")
+getS3method("plot", "GaussianSmoothAdjust")
+fitnelsonsiegeladjust
+getS3method("print", "NelsonSiegelAdjust")
+getS3method("summary", "NelsonSiegelAdjust")
+getS3method("plot", "NelsonSiegelAdjust")
+fitnelsonsiegelsvenssonadjust
+getS3method("print", "NelsonSiegelSvenssonAdjust")
+getS3method("summary", "NelsonSiegelSvenssonAdjust")
+getS3method("plot", "NelsonSiegelSvenssonAdjust")
+drpadjust
+```
+
+#Example Data
+
+```{r, echo=TRUE, size=fit1}
+Jan15[,c(4,7,10,11)]
+```
+

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'@export\n\nplot.NelsonSiegelSvensson <- function(obj){\n  plot(obj$model$Maturity, obj$model$Yield, xlab=\"Maturity\", ylab=\"Yield\",\n       main=\"Nelson-Siegel-Svennson Model\",las=1)\n  lines(seq(0.1,max(obj$model$Maturity),0.1),\n        predict(obj, newdata=data.frame(Maturity=seq(0.1,max(obj$model$Maturity),0.1))))\n  abline(v=10,lty=2)\n}\n",
+    "created" : 1453329883962.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3546140192",
+    "id" : "7DF5FA28",
+    "lastKnownWriteTime" : 1453679063,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/plotnelsonsiegelsvensson.R",
+    "project_path" : "R/plotnelsonsiegelsvensson.R",
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "relative_order" : 24,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

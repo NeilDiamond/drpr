@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#'gswt1\n#'\n#'@description Local Constant Smoothing\n#'\n#'@param tt Target Tenor\n#'@param data Data file consisting of at least 3 columns: Maturity, Amount.issued, and Yield\n#'@param maturity Maturity\n#'@param issue Amount issued (should be numeric)\n#'@param yield Yield\n#'@param sigma Smoothing Constant\n#'@return a list of class \"GaussianSmoother\"\n#'@export\n#'\n\n\n\n\ngswt1 <-\n  function (tt = 10, data=Jan15, sigma = 1.5, ...){\n    maturity <- data$Maturity\n    issue <- data$Amount.issued\n    yield <- data$Yield\n    w <- issue * dnorm(maturity, tt, sigma)\n    w <- w/sum(w)\n    reg1 <- lm(maturity ~ 1, weights = w, model=T)\n    reg2 <- lm(yield ~ 1, weights = w, model=T)\n    result <- list(reg1, reg2, tt, sigma, data)\n    class(result) <- \"GaussianSmooth\"\n    return(result)\n  }\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "created" : 1449875882682.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3754906318",
+    "id" : "ABC1FA49",
+    "lastKnownWriteTime" : 1453343175,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/gswt1.R",
+    "project_path" : "R/gswt1.R",
+    "properties" : {
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

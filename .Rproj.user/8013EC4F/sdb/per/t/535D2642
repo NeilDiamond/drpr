@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'drplot\n#'\n#'@description Compare Gaussian Smoothing, Nelson-Siegel, and Nelson-Siegel-Svensson fits\n#'\n#'@param GS10\n#'@param NSmodel\n#'@param NSSmodel\n#'@return scatter plot of Yields vs Maturities with Gaussian Smooth, Nelson-Siegel, and Nelson-Siegel-Svensson curves\n#'@export\n#'\n\ndrpplot <- function(GSmodel10, NSmodel, NSSmodel){\n  plot(NSmodel$model$Yield~NSmodel$model$Maturity,xlab=\"Maturity\", ylab=\"Yield\",\n       main=\"Comparison of Gaussian Smoothing,\\nNelson-Siegel, and Nelson-Siegel-Svensson\")\n  lines(seq(0.1,max(NSmodel$model$Maturity),0.1),\n        predict(NSmodel, newdata=data.frame(Maturity=seq(0.1,max(NSmodel$model$Maturity),0.1))))\n  lines(seq(0.1,max(NSSmodel$model$Maturity),0.1),\n        predict(NSSmodel, newdata=data.frame(Maturity=seq(0.1,max(NSSmodel$model$Maturity),0.1))))\n  xx <- seq(0.1,max(GSmodel10[[1]]$model$maturity),0.1)\n  yy <- unlist(sapply(sapply(lapply(xx,gswt1,data=GSmodel10[[5]]),\"[\",2),\"[\",1))\n  invisible(lines(xx,yy))\n  abline(v=10, lty=2)\n}\n",
+    "created" : 1453330506524.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2738943739",
+    "id" : "535D2642",
+    "lastKnownWriteTime" : 1453688787,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/drpplot.R",
+    "project_path" : "R/drpplot.R",
+    "properties" : {
+        "tempName" : "Untitled6"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

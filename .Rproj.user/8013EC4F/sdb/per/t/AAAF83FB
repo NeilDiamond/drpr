@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' Nelson-Siegel model\n#\n#' Nelson-Siegel model with Diebold and Li Parameterization\n#\n#' @param maturity maturity in years\n#' @param lambda decay factor\n#' @param beta1 long term factor\n#' @param beta2 short term factor\n#' @param beta3 curvature factor\n#' @return Nelson-Siegel function.\n#' @export\nnelsonsiegelorig <- function(maturity, lambda, beta1, beta2, beta3){\n  return(beta1 + beta2 * (1-exp(-lambda*maturity)) / (lambda*maturity)+\n           beta3 * ((1-exp(-lambda*maturity)) / (lambda*maturity)-exp(-lambda*maturity)))\n}\n",
+    "created" : 1453506225390.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "798727777",
+    "id" : "AAAF83FB",
+    "lastKnownWriteTime" : 1450299713,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/NelsonSiegel.R",
+    "project_path" : "R/NelsonSiegel.R",
+    "properties" : {
+    },
+    "relative_order" : 31,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

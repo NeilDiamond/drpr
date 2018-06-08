@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'plot.GaussianSmoothadjust\n#'\n#'@description plot method for class \"GaussianSmoothAdjust\"\n#'\n#'@param obj an object of class \"GaussianSmoothAdjust\"\n#'@return scatter plot of Yields vs Credit ratings with Gaussian smoother curves corresponding to the three credit rating BBB-, BBB, and BBB+\n#'@export\n#'\n#'\nplot.GaussianSmoothAdjust <- function(obj){\n  plot(obj[[1]]$model$maturity,obj[[2]]$model$yield+obj[[6]],\n       xlab=\"Maturity\", ylab=\"Yield\",\n       main=\"Gaussian Smoother\\nAdjusted for Credit Ratings\",\n       pch=as.numeric(obj[[5]]$Credit.rating))\n  xx <- seq(0.1,max(obj[[1]]$model$maturity),0.1)\n  yy <- unlist(sapply(sapply(lapply(xx,gswt1,data=obj[[5]]),\"[\",2),\"[\",1))\n  tt1 <- table(obj[6])\n  nn1 <- as.numeric(names(tt1))\n  invisible(lines(xx,yy))\n  invisible(lines(xx,yy+nn1[1]))\n  invisible(lines(xx,yy+nn1[3]))\n  n2 <- tt1[2]\n  n3 <- tt1[3]\n  n1 <- tt1[1]\n  w1 <- n1/(n1+n2+n3)\n  w2 <- n2/(n1+n2+n3)\n  w3 <- n3/(n1+n2+n3)\n  x <- w1*(yy+nn1[1])+w2*yy+w3*(yy+nn1[3])\n  invisible(lines(xx,x, lty=2))\n  abline(v=10,lty=2)\n}\n",
+    "created" : 1453345862781.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2401870442",
+    "id" : "6EAD71",
+    "lastKnownWriteTime" : 1453689496,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/plotGaussianSmoothadjust.R",
+    "project_path" : "R/plotGaussianSmoothadjust.R",
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "relative_order" : 27,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

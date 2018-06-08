@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'plot.GaussianSmooth\n#'\n#'@description plot method for class \"GaussianSmooth\"\n#'\n#'@param obj an object of class \"GaussianSmooth\"\n#'@return A scatter plot of Yields vs Maturites with the Gaussian Smoothed line\n#'@export\n#'\n\nplot.GaussianSmooth <- function(obj, ...){\n  plot(obj[[1]]$model$maturity,obj[[2]]$model$yield, xlab=\"Maturity\", ylab=\"Yield\",\n       main=\"Gaussian Smoother\")\n  xx <- seq(0.1,max(obj[[1]]$model$maturity),0.1)\n  yy <- unlist(sapply(sapply(lapply(xx,gswt1,data=obj[[5]]),\"[\",2),\"[\",1))\n  invisible(lines(xx,yy))\n  abline(v=10,lty=2)\n}\n",
+    "created" : 1453343563526.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4205564135",
+    "id" : "6C2B3094",
+    "lastKnownWriteTime" : 1453679010,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/plotGaussianSmooth.R",
+    "project_path" : "R/plotGaussianSmooth.R",
+    "properties" : {
+        "tempName" : "Untitled5"
+    },
+    "relative_order" : 12,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

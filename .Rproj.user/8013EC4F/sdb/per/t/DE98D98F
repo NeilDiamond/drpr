@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'plot.NelsonSiegelSvenssonadjust\n#'\n#'@description plot method for class \"NelsonSiegelSvenssonAdjust\"\n#'\n#'@param obj an object of class \"NelsonSiegelSvenssonAdjust\"\n#'@return scatter plot of Yields vs Maturities and fitted Nelson-Siegel-Svensson curves corresponding to the three credit ratings BBB-, BBB, and BBB+\n#'@export\n#'\n\nplot.NelsonSiegelSvenssonAdjust <- function(obj){\n  plot(obj$model$Maturity, obj$model$Yield, xlab=\"Maturity\", ylab=\"Yield\",\n       main=\"Nelson-Siegel-Svennson Model\\nAdjusted for Credit Ratings\",las=1,\n       pch=1+obj$model$BBB+2*obj$model$BBBm)\n  p1 <- predict(obj, newdata=data.frame(Maturity=seq(0.1,max(obj$model$Maturity),0.1),\n                                        BBB=rep(0,length(seq(0.1,max(obj$model$Maturity),0.1))),\n                                        BBBm=rep(0,length(seq(0.1,max(obj$model$Maturity),0.1)))))\n  p2 <- predict(obj, newdata=data.frame(Maturity=seq(0.1,max(obj$model$Maturity),0.1),\n                                        BBB=rep(1,length(seq(0.1,max(obj$model$Maturity),0.1))),\n                                        BBBm=rep(0,length(seq(0.1,max(obj$model$Maturity),0.1)))))\n  p3 <- predict(obj, newdata=data.frame(Maturity=seq(0.1,max(obj$model$Maturity),0.1),\n                                        BBB=rep(0,length(seq(0.1,max(obj$model$Maturity),0.1))),\n                                        BBBm=rep(1,length(seq(0.1,max(obj$model$Maturity),0.1)))))\n  lines(seq(0.1,max(obj$model$Maturity),0.1),\n        p1)\n  lines(seq(0.1,max(obj$model$Maturity),0.1),\n        p2)\n  lines(seq(0.1,max(obj$model$Maturity),0.1),\n        p3)\n\n  n2 <- sum(obj$model$BBB, na.rm=T)\n  n3 <- sum(obj$model$BBBm, na.rm=T)\n  n1 <- length(obj$model$BBB[!is.na(obj$model$BBB)])-n2-n3\n  w1 <- n1/(n1+n2+n3)\n  w2 <- n2/(n1+n2+n3)\n  w3 <- n3/(n1+n2+n3)\n  p4 <- w1*p1+w2*p2+w3*p3\n  lines(seq(0.1,max(obj$model$Maturity),0.1),\n        p4, lty=2)\n  abline(v=10,lty=2)\n}\n",
+    "created" : 1453331853437.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "853082258",
+    "id" : "DE98D98F",
+    "lastKnownWriteTime" : 1453680371,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/plotNelsonSiegelSvenssonadjust.R",
+    "project_path" : "R/plotNelsonSiegelSvenssonadjust.R",
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 30,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

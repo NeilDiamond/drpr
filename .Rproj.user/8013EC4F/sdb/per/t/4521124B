@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'print.NelsonSiegel\n#'\n#'@description print method for class \"NelsonSiegel\"\n#'\n#'@param obj an object of class \"NelsonSiegel\"\n#'@return list consisting of ten year yield (semi-annual basis) and ten year yield (annual basis)\n#'@export\n#'\n\nprint.NelsonSiegel <- function(obj){\n  transformns <- function(obj){\n    cc <- coef(obj)\n    tt <- cc\n    tt[1] <- exp(cc[1]); tt[2] <- exp(cc[2])-exp(cc[1])\n    tt[4] <- exp(cc[4]);\n    names(tt) <- c(\"beta1\",\"beta2\",\"beta3\",\"lambda\")\n    return(tt)\n  }\n\n  x <- predict(obj, newdata=data.frame(Maturity=10))[1]\n  p <- getFromNamespace(\"print.nls\",\"stats\")(obj)\n  r <- list(transformns(obj),x,((1+x/200)^2-1)*100)\n  attributes(r) <- NULL\n\n  names(r) <- c(\"Original Parameters\",\"Ten Year Yield (Semi-Annual Basis)\",\n                \"Ten Year Yield (Annual Basis)\")\n  return(r)\n}\n",
+    "created" : 1453343662433.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3144052472",
+    "id" : "4521124B",
+    "lastKnownWriteTime" : 1453611787,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/printnelsonsiegel.R",
+    "project_path" : "R/printnelsonsiegel.R",
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 15,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,13 @@
+{
+    "path" : "~/Documents/DRP/drpr/vignettes",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        },
+        {
+            "ascending" : false,
+            "columnIndex" : 4
+        }
+    ]
+}

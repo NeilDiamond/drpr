@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'plot.NelsonSiegel\n#'\n#'@description plot method for class \"NelsonSiegel\"\n#'\n#'@param obj an object of class \"NelsonSiegel\"\n#'@return scatter plot of Yields vs Maturities together with fitted Nelson-Siegel curve.\n#'@export\n#'\n\nplot.NelsonSiegel <- function(obj){\n  plot(obj$model$Maturity, obj$model$Yield, xlab=\"Maturity\", ylab=\"Yield\",\n       main=\"Nelson-Siegel Model\",las=1)\n  lines(seq(0.1,max(obj$model$Maturity),0.1),\n        predict(obj, newdata=data.frame(Maturity=seq(0.1,max(obj$model$Maturity),0.1))))\n  abline(v=10,lty=2)\n}\n",
+    "created" : 1453343903835.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "913665135",
+    "id" : "3BB96EB5",
+    "lastKnownWriteTime" : 1453679036,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/plotnelsonsiegel.R",
+    "project_path" : "R/plotnelsonsiegel.R",
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "relative_order" : 19,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'summary.NelsonSiegelSvensson\n#'\n#'@description summary method for class \"NelsonSiegelSvensson\"\n#'\n#'@param obj an object of class \"NelsonSiegel\"\n#'@return list consisting of inverse decay factors, fitted Nelson-Siegel-Svensson model, ten year yield (semi-annual basis), and ten year yield (annual basis)\n#'@export\n#'\n\nsummary.NelsonSiegelSvensson <- function(obj){\n  transformnss <- function(obj){\n    cc <- coef(obj)\n    tt <- cc\n    if(length(tt)==6){\n      tt[1] <- exp(cc[1]); tt[2] <- exp(cc[2])-exp(cc[1])\n      tt[5] <- exp(cc[5]); tt[6] <- exp(cc[5])+exp(cc[6])\n      names(tt) <- c(\"beta1\",\"beta2\",\"beta3\",\"beta4\",\"lambda1\",\"lambda2\")\n    } else {\n      tt[1] <- exp(cc[1]); tt[2] <- exp(cc[2])-exp(cc[1])\n      names(tt) <- c(\"beta1\",\"beta2\",\"beta3\",\"beta4\")\n    }\n\n    return(tt)\n  }\n  Z10 <- 10/(obj$model$lambda1)\n  Z20 <- 10/(obj$model$lambda2)\n  F10 <- (1-exp(-Z10))/Z10\n  F20 <- ((1-exp(-Z10))/Z10-exp(-Z10))\n  F30 <-  ((1-exp(-Z20))/Z20-exp(-Z20))\n  x <- predict(obj, newdata=data.frame(Maturity=10))[1]\n  r <- list(\n            getFromNamespace(\"summary.nls\",\"stats\")(obj),transformnss(obj),x,((1+x/200)^2-1)*100)\n  attributes(r) <- NULL\n  names(r) <- c(\"Fitted Nelson-Siegel-Svensson Model\",\n                \"Original Parameters\",\"Ten Year Yield (Semi-Annual Basis)\",\n                \"Ten Year Yield (Annual Basis)\")\n  return(r)\n}\n",
+    "created" : 1453344146888.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3690521551",
+    "id" : "27315072",
+    "lastKnownWriteTime" : 1479172950,
+    "last_content_update" : 1479172950621,
+    "path" : "~/Documents/DRP/drpr/R/summarynelsonsiegelsvensson.R",
+    "project_path" : "R/summarynelsonsiegelsvensson.R",
+    "properties" : {
+        "tempName" : "Untitled3"
+    },
+    "relative_order" : 25,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

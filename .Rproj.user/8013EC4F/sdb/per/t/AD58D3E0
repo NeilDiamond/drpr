@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'summary.NelsonSiegelSvenssonadjust\n#'\n#'@description summary method for class \"NelsonSiegelSvenssonAdjust\"\n#'\n#'@param obj an object of class \"NelsonSiegelSvenssonAdjust\"\n#'@return list consisting of Fitted Nelson-Siegel-Svensson model, ten year yield (semi-annual basis),  and ten year yield (annual basis)\n#'@export\n\nsummary.NelsonSiegelSvenssonAdjust <- function(obj){\n  transformnssa <- function(obj){\n    cc <- coef(obj)\n    tt <- cc\n    if(length(tt)==8){\n      tt[1] <- exp(cc[1]); tt[2] <- exp(cc[2])-exp(cc[1])\n      tt[5] <- exp(cc[5]); tt[6] <- exp(cc[6])+exp(cc[5]);\n      tt[7] <- exp(cc[8]); tt[8] <- -exp(cc[7])\n      names(tt) <- c(\"beta1\",\"beta2\",\"beta3\",\"beta4\",\"lambda1\", \"lambda2\",\"beta5\", \"beta6\")\n    } else {\n      tt[1] <- exp(cc[1]); tt[2] <- exp(cc[2])-exp(cc[1])\n      tt[5] <- exp(cc[6]); tt[6] <- -exp(cc[5])\n      names(tt) <- c(\"beta1\",\"beta2\",\"beta3\",\"beta4\",\"beta5\", \"beta6\")\n    }\n    return(tt)\n  }\n  x1 <- predict(obj, newdata=data.frame(Maturity=10, BBBm=0, BBB=0))[1]\n  x2 <- predict(obj, newdata=data.frame(Maturity=10, BBBm=0, BBB=1))[1]\n  x3 <- predict(obj, newdata=data.frame(Maturity=10, BBBm=1, BBB=0))[1]\n  n2 <- sum(obj$model$BBB, na.rm=T)\n  n3 <- sum(obj$model$BBBm, na.rm=T)\n  n1 <- length(obj$model$BBB[!is.na(obj$model$BBB)])-n2-n3\n  w1 <- n1/(n1+n2+n3)\n  w2 <- n2/(n1+n2+n3)\n  w3 <- n3/(n1+n2+n3)\n  x <- w1*x1+w2*x2+w3*x3\n  r <- list(getFromNamespace(\"summary.nls\",\"stats\")(obj),transformnssa(obj),x,((1+x/200)^2-1)*100)\n  attributes(r) <- NULL\n  names(r) <- c(\"Fitted Nelson-Siegel-Svensson Model\",\"Original Parameters\",\"Ten Year Yield (Semi-Annual Basis)\",\n                \"Ten Year Yield (Annual Basis)\")\n  return(r)\n}\n\n",
+    "created" : 1453331849430.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "866822805",
+    "id" : "AD58D3E0",
+    "lastKnownWriteTime" : 1479164323,
+    "last_content_update" : 1479164323260,
+    "path" : "~/Documents/DRP/drpr/R/summaryNelsonSiegelSvenssonadjust.R",
+    "project_path" : "R/summaryNelsonSiegelSvenssonadjust.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 26,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

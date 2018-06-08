@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'summary.GaussianSmooth\n#'\n#'@description summary method for class \"GaussianSmooth\"\n#'\n#'@param obj an object of class \"GaussianSmooth\"\n#'@return list consisting of Annualized Yields at 3, 5, 7, 10 years term to maturity; Interpolated 7 year Yield (Semi-annual basis), Extrapolated 10 year Yield (Semi-annual basis), Interpolated 7 year Yield (Annualized Basis), and Extrapolated 10 year Yield (Annualized Basis))\n#'@export\n#'\n\nsummary.GaussianSmooth <- function(obj){\n  gett.GS <- function(obj){\n    c(obj[[3]],obj[[4]],coef(obj[[2]]),coef(obj[[1]]))\n  }\n  interpmat <- matrix(NA, 4, 4)\n  interpmat[1,] <- gett.GS(gswt1(3,\n                                 data=obj[[5]]))\n  interpmat[2,] <- gett.GS(gswt1(5,\n                                 data=obj[[5]]))\n  interpmat[3,] <- gett.GS(gswt1(7,\n                                 data=obj[[5]]))\n  interpmat[4,] <- gett.GS(gswt1(10,\n                                 data=obj[[5]]))\n  interpmat <- as.data.frame(interpmat)\n  colnames(interpmat) <- c(\"Tenor\",\"Sigma\",\"SemiAnnYield\",\"EffectiveTenor\")\n  AnnYield <- ((1+interpmat[,3]/200)^2-1)*100\n  Interp7yrYield <- interpmat[3,3]+\n    (interpmat[4,3]-interpmat[3,3])/(interpmat[4,4]-interpmat[3,4])*(7-interpmat[3,4])\n  Extrap10yrYield <- interpmat[3,3]+\n    (interpmat[4,3]-interpmat[3,3])/(interpmat[4,4]-interpmat[3,4])*(10-interpmat[3,4])\n  Interp7yrYield_ann <- ((1+Interp7yrYield/200)^2-1)*100\n  Extrap10yrYield_ann <- ((1+Extrap10yrYield/200)^2-1)*100\n  AnnYieldMat <- cbind(interpmat, AnnYield)\n  results <- list(round(AnnYieldMat,4), round(Interp7yrYield,4), round(Extrap10yrYield,4),\n                  round(Interp7yrYield_ann,4), round(Extrap10yrYield_ann, 4))\n  names(results) <- c(\"Annualized Yields\", \"Interpolated 7 year Yield (Semi-annual basis)\",\n                      \"Extrapolated 10 year Yield (Semi-annual basis)\",\n                      \"Interpolated 7 year Yield (Annualized Basis)\",\n                      \"Extrapolated 10 year Yield (Annualized Basis)\")\n  results\n}\n",
+    "created" : 1453343289576.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "977757530",
+    "id" : "EE4B37EF",
+    "lastKnownWriteTime" : 1454928849,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/summaryGaussianSmooth.R",
+    "project_path" : "R/summaryGaussianSmooth.R",
+    "properties" : {
+        "tempName" : "Untitled4"
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

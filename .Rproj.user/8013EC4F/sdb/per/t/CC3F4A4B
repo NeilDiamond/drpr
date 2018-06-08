@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'drp\n#'\n#'@description Determine Debt Risk Premium\n#'\n#'@param GSmodel10 a GaussianSmooth object\n#'@param NSmodel a NelsonSiegel object\n#'@param NSSmodel a NelsonSiegelSvensson object\n#'@param avspotratesa average swap rates (semi-annual basis)\n#'@return list consisting of Average Swap rate (semi-annual basis), Annualized Swap average, 10 year final cost of debt estimate\",\"10 year DRP\"\n#'@export\n#'\n\n\ndrp <- function(GSmodel10, NSmodel, NSSmodel, avspotratesa){\n  cod10 <- round( (summary(GSmodel10)[[5]]+\n                      100*((1+predict(NSmodel,newdata=data.frame(Maturity=10))/200)^2-1)+\n                      100*((1+predict(NSSmodel,newdata=data.frame(Maturity=10))/200)^2-1 ))/3,4)\n  avswaprateann <- round(((1+avspotratesa/200)^2-1)*100,4)\n  results <- list(avspotratesa, avswaprateann, cod10, cod10-avswaprateann)\n  names(results) <- c(\"Average swap rate (semi-annual basis)\",\n                      \"Annualized Swap average (annual basis)\",\n                      \"10 year final cost of debt estimate\",\n                      \"10 year DRP\")\n  return(results)\n}\n\n\n\n",
+    "created" : 1450071868530.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3295195222",
+    "id" : "CC3F4A4B",
+    "lastKnownWriteTime" : 1454974936,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/drp.R",
+    "project_path" : "R/drp.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

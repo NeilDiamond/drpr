@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#'gswt1adjust\n#'\n#'@description Local Constant Smoothing adjusted for Credit ratings\n#'\n#'@param tt Target Tenor\n#'@param data Data file consisting of at least 3 columns: Maturity, Amount.issued, and Yield\n#'@param maturity Maturity\n#'@param issue Amount issued\n#'@param yield Yield\n#'@param sigma Smoothing Constant\n#'@return a list of class \"GaussianSmoothAdjust\"\n#'@export\n#'\n#'\n\n\n\ngswt1adjust <- function(tt = 10, data=Jan15, sigma = 1.5){\n  gswt0 <-\n    function  (...){\n      maturity <- data$Maturity\n      issue <- data$Amount.issued\n      yield <- data$Yield\n      w <- issue * dnorm(maturity, tt, sigma)\n      w <- w/sum(w)\n      reg1 <- lm(maturity ~ 1, weights = w, model=T)\n      reg2 <- lm(yield ~ 1, weights = w, model=T)\n      result <- c(tt,sigma, coef(reg2), coef(reg1))\n      names(result) <- c(\"Target Tenor\",\"Sigma\",\"Target Tenor Yield\",\"Effective Term to Maturity\")\n      return(result)\n    }\n  maturity <- data$Maturity\n  issue <- data$Amount.issued\n  yield <- data$Yield\n  w <- issue * dnorm(maturity, tt, sigma)\n  w <- w/sum(w)\n  adjust1 <- rep(0, nrow(data))\n  newdata <- data.frame(Maturity=data$Maturity, Amount.issued=data$Amount.issued,\n                        Yield=data$Yield)\n\n  resids1 <- data$Yield - t(sapply(data$Maturity, gswt0, data=newdata))[,3]\n  adjust <- with(data, model.matrix(~Credit.rating))[,-1]%*%\n    coef(lm(resids1~Credit.rating, data=data))[-1]\n  i <- 0\n  while(sum(adjust^2)>10^(-8)){\n    i <- i+1\n    #cat(i, sum(adjust^2),\"\\n\")\n    adjust1 <- adjust+adjust1\n    newdata <- data.frame(Maturity=data$Maturity, Amount.issued=data$Amount.issued,\n                          Yield=data$Yield-adjust1)\n    resids1 <- data$Yield - adjust1 - t(sapply(data$Maturity, gswt0, data=newdata))[,3]\n    adjust <- with(data, model.matrix(~Credit.rating))[,-1]%*%\n      coef(lm(resids1~Credit.rating, data=data))[-1]\n  }\n\n  reg1 <- lm(maturity ~ 1, weights = w, model=T)\n  reg2 <- lm(yield -adjust1 ~ 1, weights = w, model=T)\n  result <- list(reg1, reg2, tt, sigma, data, adjust1, with(data, model.matrix(~Credit.rating)))\n  class(result) <- \"GaussianSmoothAdjust\"\n  return(result)\n}\n\n\n\n\n\n\n\n\n\n",
+    "created" : 1450691675222.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1152028448",
+    "id" : "FEC8B625",
+    "lastKnownWriteTime" : 1453683693,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/gswt1adjust.R",
+    "project_path" : "R/gswt1adjust.R",
+    "properties" : {
+    },
+    "relative_order" : 8,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

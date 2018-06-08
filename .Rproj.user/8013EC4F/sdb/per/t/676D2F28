@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'print.GaussianSmoothadjust\n#'\n#'@description print method for class \"GaussianSmoothAdjust\"\n#'\n#'@param obj an object of class \"GaussianSmoothAdjust\"\n#'@return numeric vector consisting of Target Tenor, sigma, Target Tenor Yield, and Effective Term to Maturity\n#'@export\n#'\n\nprint.GaussianSmoothAdjust <- function(obj){\n  adj <- sum(as.numeric(names(table(obj[[6]])))*table(obj[[6]]))/sum(as.numeric(table(obj[[6]])))\n  result <- c(obj[[3]], obj[[4]], coef(obj[[2]])+adj, coef(obj[[1]]))\n  names(result) <- c(\"Target Tenor\", \"Sigma\", \"Target Tenor Yield\",\n                     \"Effective Term to Maturity\")\n  return(result)\n}\n\n",
+    "created" : 1453331339590.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2678471067",
+    "id" : "676D2F28",
+    "lastKnownWriteTime" : 1453683612,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/printGaussianSmoothadjust.R",
+    "project_path" : "R/printGaussianSmoothadjust.R",
+    "properties" : {
+        "tempName" : "Untitled2"
+    },
+    "relative_order" : 13,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

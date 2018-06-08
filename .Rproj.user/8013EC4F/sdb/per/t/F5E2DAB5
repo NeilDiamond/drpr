@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: drpr\nType: Package\nTitle: Calculates DRP\nVersion: 0.992\nDate: 23/11/2016\nAuthor: Neil Diamond\nMaintainer: Neil Diamond <neil.diamond@esquant.com.au>\nDescription: Applies Gaussian Kernel smoothing, and fits Nelson-Siegel and Nelson-Siegel-Svensson models to a dataset of Yields and Maturities and determines DRP based on the average result of the three methods.\nLicense: GPL-3\nLazyData: TRUE\nLazyLoad: TRUE\nDepends: minpack.lm, nnls\nSuggests: knitr\nVignetteBuilder: knitr\n",
+    "created" : 1453713829662.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "538307882",
+    "id" : "F5E2DAB5",
+    "lastKnownWriteTime" : 1479849774,
+    "last_content_update" : 1479849774919,
+    "path" : "~/Documents/DRP/drpr/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 35,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}

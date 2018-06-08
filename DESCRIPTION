@@ -1,0 +1,14 @@
+Package: drpr
+Type: Package
+Title: Calculates DRP
+Version: 0.992
+Date: 23/11/2016
+Author: Neil Diamond
+Maintainer: Neil Diamond <neil.diamond@esquant.com.au>
+Description: Applies Gaussian Kernel smoothing, and fits Nelson-Siegel and Nelson-Siegel-Svensson models to a dataset of Yields and Maturities and determines DRP based on the average result of the three methods.
+License: GPL-3
+LazyData: TRUE
+LazyLoad: TRUE
+Depends: minpack.lm, nnls
+Suggests: knitr
+VignetteBuilder: knitr

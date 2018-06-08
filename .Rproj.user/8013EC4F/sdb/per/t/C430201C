@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' Fit the Nelson-Siegel model\n#\n#\n#' @param data data file with at least columns named Yield and Maturity\n#' @param lambdastartval starting value for lambda in Nelson-Siegel model\n#' @param epsilon a small value to prevent -Inf when taking log of zero\n#' @return A NelsonSiegel object\n#' @export\n\nfitnelsonsiegel <- function(data, lambdastartval=lambdastart(2.5),\n                                     epsilon=1E-14){\n  lambda <- lambdastartval\n  DF <- data\n  y <- DF$Yield\n  Z <- DF$Maturity*lambda\n  F0 <- 1-(1-exp(-Z))/Z\n  F1 <- (1-exp(-Z))/Z\n  F2 <- ((1-exp(-Z))/Z-exp(-Z))\n  xx1 <- nnnpls(cbind(F0,F1,F2),DF$Yield,c(1,1,-1))\n  xx2 <- nnnpls(cbind(F0,F1,F2),DF$Yield,c(1,1,1))\n  mindeviance=c(deviance(xx1),deviance(xx2))\n  eval(parse(text=paste0(\"svA <- coef(xx\",which.min(mindeviance),\")\")))\n  fitorig1 <- nlsLM(Yield~ exp(delta1) + (exp(delta2)-exp(delta1)) * (1-exp(-Maturity*(exp(gamma)))) /\n                      (Maturity*(exp(gamma))) +\n                      delta3 * ((1-exp(-Maturity*(exp(gamma)))) /\n                                  (Maturity*(exp(gamma)))-\n                                  exp(-Maturity*(exp(gamma)))),\n                    data=DF,\n                    start=list(delta1=log(svA[1]+epsilon),\n                               delta2=log(svA[2]+epsilon),\n                               delta3=svA[3],\n                               gamma=log(lambdastartval)),\n                    control=nls.lm.control(maxiter=1000,maxfev=2000), trace=F,model=T)\n  class(fitorig1) <- c(\"NelsonSiegel\",\"nls\")\n  return(fitorig1)\n}\n\n\n\n",
+    "created" : 1453343653012.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3264343872",
+    "id" : "C430201C",
+    "lastKnownWriteTime" : 1454583210,
+    "last_content_update" : 0,
+    "path" : "~/Documents/DRP/drpr/R/fitnelsonsiegel.R",
+    "project_path" : "R/fitnelsonsiegel.R",
+    "properties" : {
+    },
+    "relative_order" : 14,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
